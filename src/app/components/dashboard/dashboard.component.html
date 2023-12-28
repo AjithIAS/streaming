@@ -35,7 +35,7 @@
           <h1 class="h2">User Profile</h1>
         </div>
         <!-- Show user data when logged in -->
-        <div class="row" *ngIf="authService.userData as user">
+        <!-- <div class="row" *ngIf="authService.userData as user">
           <div class="col-md-12">
             <div class="media">
               <img class="align-self-start mr-5 img-thumbnail rounded-circle" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}"
@@ -48,6 +48,35 @@
               </div>
             </div>
           </div>
+        </div> -->
+        <div class="displayTableCell col-md-12">
+          <div class="authBlock">
+            <h3>join  room</h3>
+            <div class="formGroup">
+              <input
+                type="text"
+                class="formControl"
+                placeholder="Room Code"
+                #roomId
+                required
+              />
+            </div>
+        
+            
+        
+            <!-- Calling SignIn Api from AuthService -->
+            <div class="formGroup">
+              <input
+                type="button"
+                class="btn btnPrimary"
+                value="add"
+                (click)="joinRoom(roomId.value)"
+              />
+            </div>
+        
+          
+        
+        </div>
         </div>
 
       </div>
@@ -90,32 +119,3 @@
 
 <!-- Join Room -->
 
-<div class="displayTableCell">
-  <div class="authBlock">
-    <h3>join  room</h3>
-    <div class="formGroup">
-      <input
-        type="text"
-        class="formControl"
-        placeholder="Room Code"
-        #roomId
-        required
-      />
-    </div>
-
-    
-
-    <!-- Calling SignIn Api from AuthService -->
-    <div class="formGroup">
-      <input
-        type="button"
-        class="btn btnPrimary"
-        value="Create"
-        (click)="joinRoom(roomId.value)"
-      />
-    </div>
-
-  
-
-</div>
-</div>

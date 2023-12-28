@@ -6,7 +6,6 @@ import { AuthService } from '../../shared/services/auth.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-
 export class DashboardComponent implements OnInit {
   constructor(public authService: AuthService) {}
 
@@ -14,13 +13,13 @@ export class DashboardComponent implements OnInit {
     this.authService.getUsers();
   }
 
-  createRoom(roomname){
-    this.authService.createRoom(roomname).then(res =>{
-      console.log(res)
-    })
+  createRoom(roomname) {
+    this.authService.createRoom(roomname).then((res) => {
+      console.log(res);
+    });
   }
 
-  joinRoom(roomId){
-
+  joinRoom(roomId) {
+    this.authService.joinRoom(roomId);
   }
 }

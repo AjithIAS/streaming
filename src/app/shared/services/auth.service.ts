@@ -1,10 +1,14 @@
 import { Injectable, NgZone } from '@angular/core';
 import { User } from '../services/user';
+// import { FieldValue } from 'firebase-admin/firestore';
+// import admin from 'firebase-admin';
 
 import {
   AngularFirestore,
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
+import firebase from 'firebase/compat/app';
+
 import * as auth from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
@@ -20,7 +24,7 @@ export class AuthService {
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
     public router: Router,
-    public ngZone: NgZone // NgZone service to remove outside scope warning
+    public ngZone: NgZone, // NgZone service to remove outside scope warning
   ) {
     /* Saving user data in localstorage when 
     logged in and setting up null when logged out */
@@ -43,7 +47,7 @@ export class AuthService {
       .then((result) => {
         this.SetUserData(result.user);
         this.afAuth.authState.subscribe((user) => {
-          console.log(user)
+          console.log(user);
           if (user) {
             this.router.navigate(['dashboard']);
           }
@@ -56,7 +60,6 @@ export class AuthService {
   loginWithGoogle() {
     this.afAuth.signInWithPopup(new auth.GoogleAuthProvider());
   }
-
 
   // Sign up with email/password
   SignUp(email: string, password: string) {
@@ -105,7 +108,7 @@ export class AuthService {
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
   SetUserData(user: any) {
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-      `users/${user.uid}`
+      `users/${user.uid}`,
     );
     const userData: User = {
       uid: user.uid,
@@ -120,23 +123,27 @@ export class AuthService {
   }
 
   createRoom(roomName: string) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let autoId = '';
     for (let i = 0; i < 8; i++) {
-      autoId += chars.charAt(Math.floor(Math.random() * chars.length))
+      autoId += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return this.afs.collection('rooms').add({
       name: roomName,
       users: [],
       currentSong: null,
-      roomCode : autoId
+      roomCode: autoId,
     });
   }
 
-  getUsers(){
-    this.afs.collection('rooms').snapshotChanges().subscribe(res =>{
-      console.log(res)
-    })
+  getUsers() {
+    this.afs
+      .collection('rooms')
+      .snapshotChanges()
+      .subscribe((res) => {
+        console.log(res);
+      });
 
     // this.afs.collection('rooms').snapshotChanges().pipe(
     //   map(changes =>
@@ -147,7 +154,54 @@ export class AuthService {
     // ).subscribe(data => {
     //   this.tutorials = data;
     // });
-  
+  }
+
+  // Join roomCode
+  joinRoom(_id: string) {
+    console.log(this.userData.uid);
+    let doc = this.afs.collection('rooms', (ref) =>
+      ref.where('roomCode', '==', _id),
+    );
+
+    doc
+      .get()
+      .pipe(
+        map((snapshot) => {
+          // let items = [];
+          let filtered = snapshot.docs.map((a) => {
+            const data = a.data();
+            console.log(data);
+            const id = a.id;
+            // items.push({ id, ...data });
+            return { id, ...(data as Record<string, unknown>) };
+          });
+          return filtered;
+        }),
+      )
+
+      .subscribe((_doc: any) => {
+        console.log(_doc);
+        let id = _doc[0].id; //first result of query [0]
+        // console.log(_doc[0]);
+        let users = [_doc[0].users];
+        if (!_doc[0].users.includes(this.userData.uid)) {
+          // ✅ only runs if value not in array
+          _doc[0].users.push(this.userData.uid);
+        } else {
+          alert('Already your in this Room !!!! ');
+        }
+
+        // users.push(this.userData.uid);
+        const fieldValue = firebase;
+        console.log(users);
+
+        this.afs
+          .doc(`rooms/${id}`)
+          .update({ users: _doc[0].users })
+          .then((data) => {
+            alert('added Room !!');
+          });
+      });
   }
 
   // Sign out
