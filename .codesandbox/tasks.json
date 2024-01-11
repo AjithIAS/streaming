@@ -57,6 +57,22 @@
     "npm install os-browserify": {
       "name": "os-browserify",
       "command": "npm install os-browserify"
+    },
+    "npm install videogular2 --save": {
+      "name": "videogular2 --save",
+      "command": "npm install videogular2 --save"
+    },
+    "videogular2 --save": {
+      "name": "npm install",
+      "command": "videogular2 --save"
+    },
+    "ng add @angular/material": {
+      "name": "@angular/material",
+      "command": "ng add @angular/material"
+    },
+    "npm install @angular/material": {
+      "name": "@angular/material",
+      "command": "npm install @angular/material"
     }
   }
 }

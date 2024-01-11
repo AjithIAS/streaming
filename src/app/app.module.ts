@@ -18,10 +18,11 @@ import { VerifyEmailComponent } from './components/verify-email/verify-email.com
 
 // routing
 import { AppRoutingModule } from './app-routing.module';
+import { FormsModule } from '@angular/forms';
 
 // service
 import { AuthService } from './shared/services/auth.service';
-
+import { RoomComponent } from './components/room/room.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { AuthService } from './shared/services/auth.service';
     SignUpComponent,
     ForgotPasswordComponent,
     VerifyEmailComponent,
+    RoomComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,9 +42,9 @@ import { AuthService } from './shared/services/auth.service';
     AngularFireStorageModule,
     AngularFireDatabaseModule,
     AppRoutingModule,
+    FormsModule,
   ],
   providers: [AuthService],
   bootstrap: [AppComponent],
 })
-
 export class AppModule {}

@@ -1,0 +1,30 @@
+<!-- <div id="instructions">
+	<video #videoPlayer1 (click)="toggleVideo1($event)" id="my_video_1" class="video-js vjs-default-skin" autoplay width="640px" height="267px" controls preload="none"
+		poster='{{current_video?.thumbnailUrl}}'
+		data-setup='{ "aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'>
+		<source src="{{current_video?.videoUrl}}" type='video/mp4' />
+		<source src="https://vjs.zencdn.net/v/oceans.webm" type='video/webm' />
+	</video>
+	<button (click)="playPause()">Play/Pause</button>
+	<button (click)=" nextVideo()">next</button>
+
+	<button (click)="skip(-10)">Rewind</button>
+	<button (click)="skip(10)">Fastforward</button>
+</div>
+
+<div class="video">
+	<video controls (click)="toggleVideo($event)" #videoPlayer>
+		<source src="https://vjs.zencdn.net/v/oceans.mp4" type="video/mp4" />
+		Browser not supported
+	</video>
+</div> -->
+<div class="message_list">
+	<div class="chat-con" *ngFor="let message of messages" [ngClass]="{'my_msg' : loggedUser == message.sentBy}">
+		{{message.message}}
+	</div>
+</div>
+
+<div class="chatbox">
+	<textarea name="" [(ngModel)]="message" id="" cols="30" rows="3"></textarea>
+	<button type="button" (click)="send()">Send</button>
+</div>

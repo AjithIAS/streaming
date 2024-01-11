@@ -1,7 +1,7 @@
 <!-- Top navigation -->
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
   <a class="navbar-brand col-sm-3 col-md-2 mr-0">
-    <img class="brand-logo" src="assets/logo-positronx-white.svg" alt="positronX.io Logo">
+    <img class="brand-logo" src="assets/logo-positronx-white.svg" alt=" Logo">
   </a>
 </nav>
 
@@ -29,6 +29,73 @@
 
     <!-- Main content -->
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+<div class="container">
+  <div class="row">
+   <!-- Join Room -->
+    <div class="col-sm-12 col-md-6">
+      <h3>join  room</h3>
+      <div class="formGroup">
+        <input
+          type="text"
+          class="formControl"
+          placeholder="Room Code"
+          #roomId
+          required
+        />
+      </div>
+
+      <div class="formGroup">
+        <input
+          type="button"
+          class="btn btnPrimary"
+          value="add"
+          (click)="joinRoom(roomId.value)"
+        />
+      </div>
+  
+      
+    </div>
+
+    <!-- Room List -->
+    <div class="col-sm-12 col-md-6">
+      <div class="authBlock">
+        <h3>Create new room</h3>
+        <div class="formGroup">
+          <input
+            type="text"
+            class="formControl"
+            placeholder="Room Name"
+            #roomName
+            required
+          />
+        </div>
+  
+        
+  
+        <!-- Calling SignIn Api from AuthService -->
+        <div class="formGroup">
+          <input
+            type="button"
+            class="btn btnPrimary"
+            value="Create"
+            (click)="createRoom(roomName.value)"
+          />
+        </div>
+  
+      
+  
+    </div>
+      <h3>Your  rooms</h3>
+      <div class="rooms">
+        <button type="button" (click)="goToRoom(room.id)" *ngFor="let room of rooms"> {{room.name}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
       <div class="inner-adjust">
 
         <div class="pt-3 pb-2 mb-3 border-bottom">
@@ -51,30 +118,12 @@
         </div> -->
         <div class="displayTableCell col-md-12">
           <div class="authBlock">
-            <h3>join  room</h3>
-            <div class="formGroup">
-              <input
-                type="text"
-                class="formControl"
-                placeholder="Room Code"
-                #roomId
-                required
-              />
-            </div>
+ 
         
             
         
             <!-- Calling SignIn Api from AuthService -->
-            <div class="formGroup">
-              <input
-                type="button"
-                class="btn btnPrimary"
-                value="add"
-                (click)="joinRoom(roomId.value)"
-              />
-            </div>
-        
-          
+            
         
         </div>
         </div>

@@ -131,7 +131,7 @@ export class AuthService {
     }
     return this.afs.collection('rooms').add({
       name: roomName,
-      users: [],
+      users: [this.userData.uid],
       currentSong: null,
       roomCode: autoId,
     });
@@ -144,17 +144,32 @@ export class AuthService {
       .subscribe((res) => {
         console.log(res);
       });
+  }
 
-    // this.afs.collection('rooms').snapshotChanges().pipe(
-    //   map(changes =>
-    //     changes.map(c =>
-    //       ({ id: c.payload.doc.id, ...c.payload.doc.data() })
-    //     )
-    //   )
-    // ).subscribe(data => {
-    //   this.tutorials = data;
+  //******************** */
+  // Get rooms
+  getRooms() {
+    let user_id = JSON.parse(localStorage.getItem('user')).uid;
+    console.log(user_id);
+
+    let doc = this.afs.collection('rooms', (ref) =>
+      ref.where('users', 'array-contains-any', [user_id]),
+    );
+    let $changes = doc.snapshotChanges().pipe(
+      map((changes) =>
+        changes.map((c) => ({
+          id: c.payload.doc.id,
+          ...(c.payload.doc.data() as Record<string, unknown>),
+        })),
+      ),
+    );
+    return $changes;
+    // .subscribe((res) => {
+    //   console.log(res);
     // });
   }
+
+  //----------------------------//
 
   // Join roomCode
   joinRoom(_id: string) {
@@ -202,6 +217,30 @@ export class AuthService {
             alert('added Room !!');
           });
       });
+  }
+
+  /**
+   * GET ROOM BY ID
+   */
+  getRoomById(id) {
+    let collection = this.afs.collection(`rooms`);
+    return collection
+      .doc(id)
+      .valueChanges()
+      .pipe(
+        map((snapshot) => {
+          // console.log(snapshot);
+          // let items = [];
+          // let filtered = snapshot.docs.map((a) => {
+          //   const data = a.data();
+          //   console.log(data);
+          //   const id = a.id;
+          //   // items.push({ id, ...data });
+          //   return { id, ...(data as Record<string, unknown>) };
+          // });
+          return snapshot;
+        }),
+      );
   }
 
   // Sign out
