@@ -75,6 +75,9 @@ export class RoomComponent implements OnInit {
       console.log(res);
       this.messages = res;
     });
+    this.chat.collectionInitialization(this.chatId).subscribe((res) => {
+      console.log(res);
+    });
     // this.current_video = this.videos[this.current_count];
     // this.chat.sendMessage(this.chatId, 'test').then((res) => {
     //   console.log(res);

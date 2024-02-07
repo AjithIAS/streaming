@@ -20,7 +20,11 @@
 </div> -->
 <div class="message_list">
 	<div class="chat-con" *ngFor="let message of messages" [ngClass]="{'my_msg' : loggedUser == message.sentBy}">
-		{{message.message}}
+		<div class="chat_bubble">
+			{{message.message}}
+		</div>
+		<img class="profile_img" src="../assets/user.png">
+		
 	</div>
 </div>
 
