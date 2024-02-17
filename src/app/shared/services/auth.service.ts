@@ -57,6 +57,21 @@ export class AuthService {
         window.alert(error.message);
       });
   }
+
+  _loginWithGoogle() {
+    this.afAuth
+      .signInWithPopup(new auth.GoogleAuthProvider())
+      .then((googleResponse) => {
+        // Successfully logged in
+        console.log(googleResponse);
+        // Add your logic here
+      })
+      .catch((err) => {
+        // Login error
+        console.log(err);
+      });
+  }
+
   loginWithGoogle() {
     this.afAuth.signInWithPopup(new auth.GoogleAuthProvider());
   }

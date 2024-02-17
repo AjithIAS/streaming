@@ -2,17 +2,19 @@ import { Injectable, NgZone } from '@angular/core';
 import { User } from '../services/user';
 // import { FieldValue } from 'firebase-admin/firestore';
 // import admin from 'firebase-admin';
+import { combineLatest } from 'rxjs';
 
 import {
   AngularFirestore,
   AngularFirestoreDocument,
+  AngularFirestoreCollection,
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 
 import * as auth from 'firebase/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
-import { map, Observable } from 'rxjs';
+import { map, Observable, flatMap } from 'rxjs';
 import { Message } from '../models/chat.model';
 
 @Injectable({
@@ -20,7 +22,8 @@ import { Message } from '../models/chat.model';
 })
 export class ChatService {
   userData: any; // Save logged in user data
-
+  colChallangeCollection: AngularFirestoreCollection<any>;
+  feedItem: Observable<any[]>;
   constructor(
     public afs: AngularFirestore, // Inject Firestore service
     public afAuth: AngularFireAuth, // Inject Firebase auth service
@@ -72,5 +75,44 @@ export class ChatService {
         ref.orderBy('messageDate', 'asc'),
       )
       .valueChanges();
+  }
+
+  collectionInitialization(chatUID: string) {
+    this.colChallangeCollection = this.afs.collection<Message>(
+      `chatMessages/${chatUID}/messages`,
+      (ref) => ref.orderBy('messageDate', 'asc'),
+    );
+
+    return (this.feedItem = this.colChallangeCollection.snapshotChanges().pipe(
+      map((changes) => {
+        return changes.map((change) => {
+          // console.log('qw');
+          const data = change.payload.doc.data();
+          const senderId = data.sentBy;
+          // const title = data.title;
+          // console.log(data);
+          return this.afs
+            .doc('users/' + senderId)
+            .valueChanges()
+            .pipe(
+              map((collSignupData: any) => {
+                // console.log(collSignupData);
+
+                data['sender_name'] = collSignupData.displayName;
+                data['sender_photo'] = collSignupData.photoURL;
+                data['sender_email'] = collSignupData.email;
+                data['sender_id'] = collSignupData.uid;
+
+                console.log(data);
+                return data;
+              }),
+            );
+        });
+      }),
+      flatMap((feeds) => combineLatest(feeds)),
+    ));
+    // this.feedItem.subscribe((res) => {
+    //   console.log(res);
+    // });
   }
 }

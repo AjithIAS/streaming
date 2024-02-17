@@ -1,4 +1,34 @@
-.chat-con.my_msg {
+.chat_bubble {
+  height: auto;
+  background: purple;
+  width: fit-content;
+  padding: 6px 17px;
+  color: #ffffff;
+  border-radius: 7px;
+  margin-left: 10px;
+}
+.chat-con {
+  display: flex;
+  align-items: center;
+}
+.chat_bubble {
+  order: 2;
+}
+
+.profile_img {
+  width: 35px;
+  height: 35px;
+}
+
+.my_msg {
+  .chat_bubble {
+    margin-right: 10px;
+    order: 1;
+  }
+  .profile_img {
+    order: 2;
+  }
+  margin-bottom: 6px;
   display: flex;
   align-items: flex-end;
   justify-content: end;
